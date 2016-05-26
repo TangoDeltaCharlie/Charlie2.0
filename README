@@ -1,0 +1,20 @@
+Software Reqs:
+
+Python 3.4+
+PyGame 1.9.1
+Numpy
+OpenCV 3.0.0+
+
+Set up Xbox 360 controller mapping by running the standalone Xbox controller function. 
+This will print each button name when pressed, so play around until hitting A prints 'A Pressed' and so on.
+Ive commented out the original mappings that may work with WINDOWS and added Mac mappings below them, so it might be as easy as swithing the comments
+
+Once the Xbox controller is set up, run main.py. This will open a GUI asking to start the program or quit.
+Pressing 'A' or 'B' on the keyboard or on the Xbox controller will start the system. 
+The GUI will now show the webcame and sensor data.
+
+Main.py needs to be changed to connect to the Pi camera rather than the webcam
+ReceiveData.py needs to be changed to connect to the Pi and receive data rather than reading the test file I created.
+
+
+I still have a fair amount of work to do with the GUI popups for temperature control and just over all finalzing code and polishing stuff for efficiency
