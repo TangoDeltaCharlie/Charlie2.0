@@ -12,6 +12,8 @@ def processData():
     global log_file
 
     datetimeString = datetime.datetime.now().strftime("%m%d%Y-%H%M%S")
+
+
     #TODO Change file path per user
     path = "/Users/Scott/Desktop/Charlie/DataLogs/" + datetimeString + "Log.txt"
 
