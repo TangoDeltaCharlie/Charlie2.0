@@ -34,6 +34,7 @@ def receive_data():
         # read file line by line adding to queue
         if settings.TEST_MODE:
             message = inputs.readline()
+
             if message is None or message == '':
                 inputs.close()
                 inputs = open(path, "r")
@@ -44,6 +45,7 @@ def receive_data():
 
         else:
             # TODO get messages over wifi
+            # TODO check if still connected
             # Add to queue like above in test mode
             # settings.receivingQueue.put(message)
             pass

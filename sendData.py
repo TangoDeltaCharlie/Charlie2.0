@@ -3,10 +3,11 @@
 import settings
 import time
 
+
 def send_data():
 
     if not settings.TEST_MODE:
-        # Connect to IP
+        # TODO Connect to IP
         pass
 
     while True:
@@ -19,19 +20,38 @@ def send_data():
             print("Quitting sendData Thread")
             break
 
-        if settings.TEST_MODE:
+        try:
+            message = settings.sendingQueue.get(False, None)
 
-            try:
-                message = settings.sendingQueue.get(False, None)
-                print("Sending Message = " + message)
+            if message != '' and message is not None:
 
-                # TODO REMOVE SLEEP
-                time.sleep(1)
-            except settings.queue.Empty:
-                print("Sending Queue is Empty")
-                time.sleep(1)
+                if settings.low_power_mode_on:
+                    # Cut thrust in half for low power mode
+                    messageList = message.split(':')
 
-        else:
-            # TODO send over IP
+                    key = messageList[0]
+                    value = messageList[1]
+                    value = float(value)
+                    value = value/2
+                    value = str(value)
+                    message = key + ":" + value
+
+                if settings.TEST_MODE:
+                    try:
+                        print("Sending Message = " + message)
+
+                        # TODO REMOVE SLEEP
+                        # time.sleep(1)
+                    except settings.queue.Empty:
+                        print("Sending Queue is Empty")
+                        # TODO REMOVE SLEEP
+                        time.sleep(1)
+
+                else:
+                    # TODO send over IP
+                    # TODO check if still connected
+                    pass
+
+        except settings.queue.Empty:
             pass
 

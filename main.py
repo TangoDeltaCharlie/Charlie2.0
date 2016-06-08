@@ -6,6 +6,7 @@ import receiveData
 import xboxController
 import display
 import sendData
+import dataLogging
 
 import sys
 import threading
@@ -23,13 +24,16 @@ def main():
 
         if settings.startProgram:
             settings.program_running = True
+
             # Start all Threads here
             thread1 = threading.Thread(target=receiveData.receive_data, args=())
             thread1.start()
-            thread2 = threading.Thread(target=dataProcessing.processData, args=())
+            thread2 = threading.Thread(target=dataProcessing.process_data, args=())
             thread2.start()
             thread3 = threading.Thread(target=sendData.send_data, args=())
             thread3.start()
+            thread4 = threading.Thread(target=dataLogging.log_data, args=())
+            thread4.start()
 
             display.display_live_feed()
 

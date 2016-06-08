@@ -143,8 +143,8 @@ class XboxController(threading.Thread):
                       PyGameAxis.RTHUMBY: XboxControls.RTHUMBY}
 
     # map between pygame axis (trigger) ids and xbox control ids
-    TRIGGERCONTROLMAP = {PyGameAxis.RTRIGGER: XboxControls.RTRIGGER,
-                         PyGameAxis.LTRIGGER: XboxControls.LTRIGGER}
+    TRIGGERCONTROLMAP = {PyGameAxis.LTRIGGER: XboxControls.LTRIGGER,
+                         PyGameAxis.RTRIGGER: XboxControls.RTRIGGER}
 
     # map between pygame buttons ids and xbox contorl ids
     """
@@ -189,7 +189,8 @@ class XboxController(threading.Thread):
 
         # persist values
         self.running = False
-        self.controllerCallBack = self.controlCallBack #Set to None to stop printing
+        # self.controllerCallBack = self.controlCallBack # TODO Set to None to stop printing
+        self.controllerCallBack = None
         self.joystickNo = joystickNo
         self.lowerDeadzone = deadzone * -1
         self.upperDeadzone = deadzone
@@ -456,24 +457,35 @@ class XboxController(threading.Thread):
 
     # specific callbacks for the left thumb (X & Y)
     def leftThumbX(self, xValue):
-        print("LX {}".format(xValue))
+        pass
 
     def leftThumbY(self, yValue):
-        print("LY {}".format(yValue))
+        value = int(round(yValue))
+        if value >= 0:
+            message = "FORWARD:" + str(value)
+        else:
+            message = "REVERSE:" + str(abs(value))
+
+        settings.sendingQueue.put(message)
 
     def rightThumbX(self, xValue):
-        print("RX {}".format(xValue))
+        # TODO depth calibration
+        pass
 
     def rightThumbY(self, yValue):
-        print("RY {}".format(yValue))
+        # TODO depth calibration
+        pass
 
     def lTriggerPressed(self, value):
-        print("LT {}".format(value))
+        message = "DIVE:" + str(int(round(value)))
+        settings.sendingQueue.put(message)
 
     def rTriggerPressed(self, value):
-        print("RT {}".format(value))
+        message = "SURFACE:" + str(int(round(value)))
+        settings.sendingQueue.put(message)
 
     def aPressed(self, value):
+        # TODO
         if value == 0:
             print("A Pressed")
             settings.xbox_a_pressed = True
@@ -498,16 +510,15 @@ class XboxController(threading.Thread):
             print("B Pressed")
 
     def xPressed(self, value):
-        if value == 0:
-            print("X Pressed")
+        # TODO
+        pass
 
     def yPressed(self, value):
-        if value == 0:
-            print("Y Pressed")
+        # TODO
+        pass
 
     def dpadUpPressed(self, value):
-        if value == 0:
-            print("dpadUp Pressed")
+        pass
 
     def dpadDownPressed(self, value):
         if settings.program_running:
@@ -548,28 +559,34 @@ class XboxController(threading.Thread):
                         and not settings.buoyancy_calibration_menu_is_up:
                     settings.pause_menu_is_up = True
                 print("Start Pressed")
+            if value == 1:
+                if self.controlValues[self.XboxControls.BACK] == 1:
+                    message = "KILLSWITCH:" + str(int(value))
+                    settings.sendingQueue.put(message)
 
     def backPressed(self, value):
         if value == 0:
             print("Back Pressed")
+        if value == 1:
+            if self.controlValues[self.XboxControls.START] == 1:
+                message = "KILLSWITCH:" + str(int(value))
+                settings.sendingQueue.put(message)
 
     def leftThumbPressed(self, value):
-        if value == 0:
-            print("LeftThumb Pressed")
+        pass
 
     def rightThumbPressed(self, value):
-        if value == 0:
-            print("RightThumb Pressed")
+        # TODO
+        print("MARK POI")
 
     def lbPressed(self, value):
-        if value == 0:
-            print("LB Pressed")
+        message = "TURNLEFT:" + str(int(value))
+        settings.sendingQueue.put(message)
 
     def rbPressed(self, value):
-        if value == 0:
-            print("RB Pressed")
+        message = "TURNRIGHT:" + str(int(value))
+        settings.sendingQueue.put(message)
 
     def xboxPressed(self, value):
-        if value == 0:
-            print("XBOX Pressed")
+        pass
 
