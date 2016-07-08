@@ -16,9 +16,9 @@ def main():
 
     try:
 
-        if not settings.NO_XBOX:
-            xbox_controller_thread = xboxController.XboxController(None, deadzone=30, scale=100, invertYAxis=True)
-            xbox_controller_thread.start()
+        #if not settings.NO_XBOX:
+        #    xbox_controller_thread = xboxController.XboxController(None, deadzone=30, scale=100, invertYAxis=True)
+        #   xbox_controller_thread.start()
 
         display.display_launch_screen()
 
@@ -30,8 +30,8 @@ def main():
             thread1.start()
             thread2 = threading.Thread(target=dataProcessing.process_data, args=())
             thread2.start()
-            thread3 = threading.Thread(target=sendData.send_data, args=())
-            thread3.start()
+            #thread3 = threading.Thread(target=sendData.send_data, args=())
+            #thread3.start()
             thread4 = threading.Thread(target=dataLogging.log_data, args=())
             thread4.start()
 

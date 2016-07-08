@@ -63,33 +63,39 @@ def display_live_feed():
     global cap
 
     # TODO Connect to Video Camera
-    cap = cv2.VideoCapture(0)
+    #cap = cv2.VideoCapture(0)
 
     while True:
         # Capture frame-by-frame
-        ret, frame = cap.read()
+        #ret, frame = cap.read()
 
         # TODO Draw popups here
-        if settings.pause_menu_is_up:
-            frame = display_pause_menu(frame)
+        #if settings.pause_menu_is_up:
+            #frame = display_pause_menu(frame)
 
-        elif settings.buoyancy_calibration_menu_is_up:
-            frame = display_buoyancy_calibration_menu(frame)
+        #elif settings.buoyancy_calibration_menu_is_up:
+            #frame = display_buoyancy_calibration_menu(frame)
 
-        elif settings.low_power_mode_screen_menu_is_up:
-            frame = display_low_power_menu(frame)
+        #elif settings.low_power_mode_screen_menu_is_up:
+            #frame = display_low_power_menu(frame)
 
-        elif settings.high_temp_screen_menu_is_up:
-            frame = display_high_temp_menu(frame)
+        #elif settings.high_temp_screen_menu_is_up:
+            #frame = display_high_temp_menu(frame)
 
-        frame = display_data(frame)
+
 
         # gray = cv2.resize(gray, (0,0), fx=2, fy=2)
 
         # Display the resulting frame
+        height = 100
+        width = 200
+        frame = np.zeros((height,width,3), np.uint8)
+
+        frame = display_data(frame)
+
         cv2.imshow('Charlie 2.0', frame)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        if cv2.waitKey(1) & 0xFF == ord('Q'):
             settings.quitProgram = True
             break
 
@@ -109,31 +115,67 @@ def display_data(frame):
     # y = np.size(frame, 0)-50
     x = 2
     y = 15
-    text_color = (255, 255, 255)
+    text_color = (255, 0, 0)
     font = cv2.FONT_HERSHEY_SIMPLEX
     font_scale = .5
     line_type = cv2.LINE_AA
     thickness = 1
 
+
+
+    cv2.putText(frame, "Water Depth:  " + str(settings.water_depth), (x, y), font, font_scale, text_color,
+                thickness, line_type)
+    y = y + 15
+
     cv2.putText(frame, "Water Temp:   " + str(settings.water_temp), (x, y), font, font_scale, text_color,
                 thickness, line_type)
     y = y + 15
+
+    text_color = set_text_color_temp(settings.sub_temp)
     cv2.putText(frame, "Sub Temp:     " + str(settings.sub_temp), (x, y), font, font_scale, text_color,
                 thickness, line_type)
     y = y + 15
+
+    text_color = set_text_color_temp(settings.buoy_temp)
     cv2.putText(frame, "Buoy Temp:    " + str(settings.buoy_temp), (x, y), font, font_scale, text_color,
                 thickness, line_type)
     y = y + 15
+
+    text_color = set_text_color_battery(settings.sub_battery)
     cv2.putText(frame, "Sub Battery:   " + str(settings.sub_battery), (x, y), font, font_scale, text_color,
                 thickness, line_type)
     y = y + 15
+
+    text_color = set_text_color_battery(settings.buoy_battery)
     cv2.putText(frame, "Buoy Battery:  " + str(settings.buoy_battery), (x, y), font, font_scale, text_color,
                 thickness, line_type)
-    y = y + 15
-    cv2.putText(frame, "Water Depth:  " + str(settings.water_depth), (x, y), font, font_scale, text_color,
-                thickness, line_type)
+
 
     return frame
+
+def set_text_color_temp(temp):
+    red    = (0, 0, 255)
+    yellow = (0, 255, 255)
+    blue   = (255, 0, 0)
+
+    if temp >= 90.0:
+        return red
+    elif temp >= 70.0:
+        return yellow
+    else:
+        return blue
+
+def set_text_color_battery(battery):
+    red    = (0, 0, 255)
+    yellow = (0, 255, 255)
+    blue   = (255, 0, 0)
+
+    if battery <= 10.0:
+        return red
+    elif battery <= 20.0:
+        return yellow
+    else:
+        return blue
 
 
 def display_pause_menu(frame):
